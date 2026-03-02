@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wedding Invitation | 我們的婚禮邀約</title>
+    <title>威廷與佳怡的婚禮邀約</title>
     <style>
         :root {
             --gold-primary: #D4AF37;
             --gold-light: #F9F1DC;
             --dark-text: #4A4A4A;
             --white: #FFFFFF;
-            /* 滾動動畫秒數由 JS 控制，這裡僅作變數預留 */
         }
 
         * {
@@ -19,7 +18,7 @@
             box-sizing: border-box;
             -webkit-user-select: none;
             user-select: none; /* 禁止反白 */
-            -webkit-tap-highlight-color: transparent; /* 移除手機點擊藍色高亮 */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         body, html {
@@ -29,6 +28,26 @@
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
             background-color: var(--gold-light);
         }
+
+        /* --- 燈箱 (Lightbox) 樣式 --- */
+        #photo-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            cursor: zoom-out;
+        }
+
+        #photo-overlay.active { display: flex; opacity: 1; }
+        #photo-overlay img { max-width: 90%; max-height: 80%; border: 2px solid var(--white); box-shadow: 0 0 25px rgba(0,0,0,0.5); }
 
         /* --- 掀開信封動畫 --- */
         #envelope-wrapper {
@@ -121,25 +140,23 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
             animation: bounce 2s infinite;
             font-size: 0.85rem;
+            transition: opacity 0.5s;
         }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
             40% {transform: translateX(-50%) translateY(-10px);}
-            60% {transform: translateX(-50%) translateY(-5px);}
         }
 
         /* --- 資訊卡片 --- */
         .info-card {
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
-            border-radius: 2px;
             border: 1px solid var(--gold-primary);
             text-align: center;
             width: 85%;
             max-width: 400px;
             z-index: 10;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .info-card h2 { color: var(--gold-primary); margin-bottom: 20px; font-weight: normal; letter-spacing: 3px; }
@@ -152,11 +169,10 @@
             background: var(--gold-primary);
             color: white;
             text-decoration: none;
-            border-radius: 1px;
             font-size: 0.9rem;
         }
 
-        .map-img { width: 100%; margin-top: 20px; filter: grayscale(0.3); }
+        .map-img { width: 100%; margin-top: 20px; filter: grayscale(0.2); cursor: zoom-in; }
 
     </style>
 </head>
@@ -165,6 +181,11 @@
     <audio id="bgm" loop preload="auto">
         <source src="music.mp3" type="audio/mpeg">
     </audio>
+
+    <div id="photo-overlay" onclick="closePhoto()">
+        <img id="full-res-img" src="" alt="Map Zoom">
+        <p style="color:white; position:absolute; bottom:10%; font-size:0.8rem;">點擊任意處關閉</p>
+    </div>
 
     <div id="envelope-wrapper">
         <div class="envelope" id="envelope-btn">
@@ -191,25 +212,26 @@
         <section class="section" id="sec-info" style="background-image: none !important;">
             <div class="info-card">
                 <h2>Wedding Day</h2>
-                <p><b>王小明 & 陳小美</b></p>
+                <p><b>李威廷 & 連佳怡</b></p>
                 <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
-                <p>2026年12月25日 (五)</p>
-                <p>12:00 入席 | 12:30 開席</p>
-                <p>台北晶華酒店 3F 宴會廳</p>
-                <p><small>台北市中山區中山北路二段39巷3號</small></p>
-                <img src="https://picsum.photos/400/200" class="map-img" alt="Map">
+                <p>2026年6月27日 (六)</p>
+                <p>11:30 入席 | 12:00 開席</p>
+                <p>台中林皇宮 1F 紫宴廳</p>
+                <p><small>台中市西屯區臺灣大道三段33號<br>捷運市政府站旁</small></p>
+                
+                <a href="address.jpeg" onclick="openMap(event, this.href)">
+                    <img src="address.jpeg" class="map-img" alt="Map">
+                </a>
+                
                 <a href="https://forms.gle/example" class="btn-rsvp">填寫報名表單</a>
             </div>
         </section>
     </div>
 
     <script>
-        /**
-         * 配置參數
-         */
         const config = {
-            scrollDuration: 1000,    // 頁面滑動動畫時間 (ms)
-            autoPlayDelay: 5000,     // 自動切換間隔 (ms)
+            scrollDuration: 1500, // 修改為 1.5 秒更順暢
+            autoPlayDelay: 5000, 
             musicLink: 'music.mp3',
             images: [
                 'https://picsum.photos/1080/1920?random=10',
@@ -223,24 +245,47 @@
         let isAnimating = false;
         let autoPlayTimer = null;
         let isOpened = false;
+        let isViewingPhoto = false;
 
         const container = document.getElementById('main-scroll-container');
         const bgm = document.getElementById('bgm');
 
-        // 初始化：套用圖片與動畫秒數
+        // 初始化
         document.querySelectorAll('.section').forEach((sec, i) => {
             if (config.images[i]) sec.style.backgroundImage = `url('${config.images[i]}')`;
         });
         container.style.transitionDuration = `${config.scrollDuration}ms`;
 
         /**
-         * 啟動/重置自動播放計時器
+         * 透過 <a> 標籤觸發地圖放大
+         */
+        function openMap(event, href) {
+            event.preventDefault(); // 核心：阻止 <a> 標籤跳轉網頁
+            if (!isOpened) return;
+            
+            isViewingPhoto = true;
+            stopAutoPlay(); // 放大時停止自動切換
+
+            const overlay = document.getElementById('photo-overlay');
+            const fullImg = document.getElementById('full-res-img');
+            fullImg.src = href;
+            overlay.classList.add('active');
+        }
+
+        function closePhoto() {
+            document.getElementById('photo-overlay').classList.remove('active');
+            isViewingPhoto = false;
+            startAutoPlay(); // 關閉後恢復自動切換
+        }
+
+        /**
+         * 滾動與自動播放
          */
         function startAutoPlay() {
-            stopAutoPlay(); // 先清除舊的
-            if (currentStep < totalSteps - 1) { // 沒到最後一頁才播
+            stopAutoPlay();
+            if (isOpened && !isViewingPhoto && currentStep < totalSteps - 1) {
                 autoPlayTimer = setTimeout(() => {
-                    nextPage();
+                    goToPage(currentStep + 1);
                 }, config.autoPlayDelay);
             }
         }
@@ -249,80 +294,59 @@
             if (autoPlayTimer) clearTimeout(autoPlayTimer);
         }
 
-        /**
-         * 切換頁面主函數
-         */
         function goToPage(index) {
-            if (!isOpened || isAnimating) return;
+            if (!isOpened || isAnimating || isViewingPhoto) return;
             if (index < 0 || index >= totalSteps) return;
 
             isAnimating = true;
             currentStep = index;
-            
-            // 執行位移
             container.style.transform = `translateY(-${currentStep * 100}vh)`;
 
-            // 處理提示消失
             const hint = document.getElementById('scroll-hint');
             hint.style.opacity = (currentStep === totalSteps - 1) ? "0" : "1";
 
-            // 動態結束後重置
             setTimeout(() => {
                 isAnimating = false;
-                startAutoPlay(); // 每次手動或自動切換完後重啟 5 秒計時
+                startAutoPlay();
             }, config.scrollDuration);
         }
 
-        function nextPage() { goToPage(currentStep + 1); }
-        function prevPage() { goToPage(currentStep - 1); }
-
-        /**
-         * 掀開信封
-         */
-        document.getElementById('envelope-btn').addEventListener('click', function() {
+        // 點擊信封
+        document.getElementById('envelope-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
             document.getElementById('flap').classList.add('opened-flap');
-            
             setTimeout(() => {
                 document.getElementById('envelope-wrapper').classList.add('opened-envelope');
                 isOpened = true;
-                bgm.play();
-                startAutoPlay(); // 開啟後開始計時自動播放
+                bgm.play().catch(()=>{});
+                startAutoPlay();
             }, 800);
         });
 
-        /**
-         * 交互監聽：點擊、滾輪、觸控
-         */
-        
-        // 1. 全域點擊切換 (修正手機無法點擊問題)
+        // 全域點擊切換 (排除 <a> 與 彈窗內容)
         window.addEventListener('click', (e) => {
-            if (!isOpened || isAnimating) return;
-            // 排除按鈕與地圖圖片的點擊，避免點了表單卻跳頁
-            if (e.target.closest('.info-card') || e.target.closest('.envelope')) return;
-            
-            nextPage();
+            if (!isOpened || isAnimating || isViewingPhoto) return;
+            if (e.target.closest('a') || e.target.closest('.envelope')) return;
+            goToPage(currentStep + 1);
         });
 
-        // 2. 滾輪監聽
+        // 滾輪
         window.addEventListener('wheel', (e) => {
-            if (e.deltaY > 0) nextPage();
-            else prevPage();
+            if (e.deltaY > 0) goToPage(currentStep + 1);
+            else goToPage(currentStep - 1);
         }, { passive: true });
 
-        // 3. 手機滑動監聽
+        // 手機滑動
         let touchStartY = 0;
         window.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
         }, { passive: true });
 
         window.addEventListener('touchend', (e) => {
-            if (!isOpened) return;
-            let touchEndY = e.changedTouches[0].clientY;
-            let diff = touchStartY - touchEndY;
-
-            if (Math.abs(diff) > 50) { // 滑動距離大於 50px 才判定
-                if (diff > 0) nextPage();
-                else prevPage();
+            if (!isOpened || isViewingPhoto) return;
+            let diff = touchStartY - e.changedTouches[0].clientY;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? goToPage(currentStep + 1) : goToPage(currentStep - 1);
             }
         }, { passive: true });
 
