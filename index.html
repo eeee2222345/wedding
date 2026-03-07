@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>威廷與佳怡的婚禮邀約</title>
+    <meta property="og:title" content="威廷與佳怡的婚禮邀約" />
+    <meta property="og:description" content="輕輕點開信封，讓音樂與回憶流淌。我們誠摯邀請你參與這場愛的慶典，點擊連結，開啟我們的婚禮邀請函。" />
+    <meta property="og:image" content="pic/cover.jpg" />
+    <meta property="og:type" content="website" />
+    <title>Wedding Invitation | 威廷與佳怡的婚禮邀約</title>
     <style>
         :root {
             --gold-primary: #D4AF37;
@@ -17,8 +21,16 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-user-select: none;
-            user-select: none; /* 禁止反白 */
+            user-select: none; /* 預設禁止反白 */
             -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* --- 允許反白選擇的區塊 --- */
+        .allow-select, .info-card p, .info-card small {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
         }
 
         body, html {
@@ -141,6 +153,7 @@
             animation: bounce 2s infinite;
             font-size: 0.85rem;
             transition: opacity 0.5s;
+            pointer-events: none;
         }
 
         @keyframes bounce {
@@ -170,6 +183,8 @@
             color: white;
             text-decoration: none;
             font-size: 0.9rem;
+            -webkit-user-select: none !important;
+            user-select: none !important;
         }
 
         .map-img { width: 100%; margin-top: 20px; filter: grayscale(0.2); cursor: zoom-in; }
@@ -187,7 +202,7 @@
         <p style="color:white; position:absolute; bottom:10%; font-size:0.8rem;">點擊任意處關閉</p>
     </div>
 
-    <div id="envelope-wrapper">
+    <div id="envelope-wrapper" onclick="openByEnvelope()">
         <div class="envelope" id="envelope-btn">
             <div class="envelope-flap" id="flap"></div>
         </div>
@@ -217,22 +232,21 @@
                 <p>2026年6月27日 (六)</p>
                 <p>11:30 入席 | 12:00 開席</p>
                 <p>台中林皇宮 1F 紫宴廳</p>
-                <p><small>台中市西屯區臺灣大道三段33號<br>捷運市政府站旁</small></p>
+                <p><small class="allow-select">台中市西屯區臺灣大道三段33號<br>捷運市政府站旁</small></p>
                 
                 <a href="address.jpeg" onclick="openMap(event, this.href)">
                     <img src="address.jpeg" class="map-img" alt="Map">
                 </a>
                 
-                <a href="https://forms.gle/example" class="btn-rsvp">填寫報名表單</a>
+                <a href="https://forms.gle/your-link" class="btn-rsvp">填寫報名表單</a>
             </div>
         </section>
     </div>
 
     <script>
         const config = {
-            scrollDuration: 1500, // 修改為 1.5 秒更順暢
+            scrollDuration: 1500,
             autoPlayDelay: 5000, 
-            musicLink: 'music.mp3',
             images: [
                 'https://picsum.photos/1080/1920?random=10',
                 'https://picsum.photos/1080/1920?random=11',
@@ -250,22 +264,16 @@
         const container = document.getElementById('main-scroll-container');
         const bgm = document.getElementById('bgm');
 
-        // 初始化
         document.querySelectorAll('.section').forEach((sec, i) => {
             if (config.images[i]) sec.style.backgroundImage = `url('${config.images[i]}')`;
         });
         container.style.transitionDuration = `${config.scrollDuration}ms`;
 
-        /**
-         * 透過 <a> 標籤觸發地圖放大
-         */
         function openMap(event, href) {
-            event.preventDefault(); // 核心：阻止 <a> 標籤跳轉網頁
+            event.preventDefault();
             if (!isOpened) return;
-            
             isViewingPhoto = true;
-            stopAutoPlay(); // 放大時停止自動切換
-
+            stopAutoPlay();
             const overlay = document.getElementById('photo-overlay');
             const fullImg = document.getElementById('full-res-img');
             fullImg.src = href;
@@ -275,12 +283,9 @@
         function closePhoto() {
             document.getElementById('photo-overlay').classList.remove('active');
             isViewingPhoto = false;
-            startAutoPlay(); // 關閉後恢復自動切換
+            startAutoPlay();
         }
 
-        /**
-         * 滾動與自動播放
-         */
         function startAutoPlay() {
             stopAutoPlay();
             if (isOpened && !isViewingPhoto && currentStep < totalSteps - 1) {
@@ -311,9 +316,8 @@
             }, config.scrollDuration);
         }
 
-        // 點擊信封
-        document.getElementById('envelope-btn').addEventListener('click', function(e) {
-            e.stopPropagation();
+        function openByEnvelope() {
+            if(isOpened) return;
             document.getElementById('flap').classList.add('opened-flap');
             setTimeout(() => {
                 document.getElementById('envelope-wrapper').classList.add('opened-envelope');
@@ -321,22 +325,21 @@
                 bgm.play().catch(()=>{});
                 startAutoPlay();
             }, 800);
-        });
+        }
 
-        // 全域點擊切換 (排除 <a> 與 彈窗內容)
         window.addEventListener('click', (e) => {
             if (!isOpened || isAnimating || isViewingPhoto) return;
-            if (e.target.closest('a') || e.target.closest('.envelope')) return;
+            // 允許選取文字時不跳頁
+            if (window.getSelection().toString().length > 0) return;
+            if (e.target.closest('a') || e.target.closest('.envelope') || e.target.closest('.info-card')) return;
             goToPage(currentStep + 1);
         });
 
-        // 滾輪
         window.addEventListener('wheel', (e) => {
             if (e.deltaY > 0) goToPage(currentStep + 1);
             else goToPage(currentStep - 1);
         }, { passive: true });
 
-        // 手機滑動
         let touchStartY = 0;
         window.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
