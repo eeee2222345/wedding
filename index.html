@@ -24,11 +24,12 @@
             --gold-primary: #D4AF37;
             --gold-light: #F9F1DC;
             --dark-text: #222222;
-            --light-text: #666666;
+            --light-text: #444444;
             --white: #FFFFFF;
             --brand-red: #D12E2E;
             --pink-bg: #F8D7DA;
             --pink-text: #E94E4E;
+            --soft-green: #F0F7F0;
             --font-size-base: 17px;
         }
 
@@ -50,6 +51,27 @@
         }
 
         .harshita { font-family: 'Harshita', serif; }
+        .serif { font-family: "Times New Roman", Georgia, serif; }
+        .italic { font-style: italic; }
+        .vertical-text { writing-mode: vertical-rl; text-orientation: mixed; }
+
+        /* --- 載入動畫 --- */
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 5000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease;
+        }
+        .loader-ring {
+            width: 50px; height: 50px;
+            border: 3px solid var(--gold-light);
+            border-top: 3px solid var(--gold-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loader-text { margin-top: 1.5rem; color: var(--gold-primary); letter-spacing: 2px; font-size: 0.9rem; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* --- 封套與動畫 --- */
         #envelope-wrapper {
@@ -72,18 +94,14 @@
             flex-direction: column; 
             will-change: transform; 
             background: #fff; 
-            max-width: 600px; /* 限制 PC 寬度以模擬手機感 */
+            max-width: 600px; 
             margin: 0 auto;
             box-shadow: 0 0 50px rgba(0,0,0,0.05);
         }
 
-        /* --- 雜誌排版通用樣式 --- */
+        /* --- 通用樣式 --- */
         section { width: 100%; position: relative; overflow: hidden; background: #fff; }
         .img-full { width: 100%; display: block; height: auto; }
-        .serif { font-family: "Times New Roman", Georgia, serif; }
-        .italic { font-style: italic; }
-        .script { font-family: 'SilenceRocken', 'Brush Script MT', cursive; }
-        .vertical-text { writing-mode: vertical-rl; text-orientation: mixed; }
         .divider-bar { 
             width: 100%; 
             padding: 1.5rem 8%; 
@@ -93,22 +111,12 @@
             border-bottom: 1px solid #f0f0f0; 
             font-size: 0.75rem; 
             letter-spacing: 0.25rem; 
-            color: #777; 
+            color: var(--light-text); 
             background: #fff; 
             font-weight: 300; 
         }
 
-        /* --- 各區塊特定樣式 --- */
-        
-        /* Sec 1: Hero */
-        #sec-hero { padding-top: 0; text-align: center; }
-        .hero-top-text {
-            padding: 2rem 0;
-            font-size: 2.5rem;
-            color: #888;
-            font-family: serif;
-            letter-spacing: 2px;
-        }
+        /* --- 各區塊樣式 --- */
         .hero-info-box { 
             position: absolute; 
             bottom: 3rem; 
@@ -130,18 +138,15 @@
         }
         .welcome-text { font-size: 1.1rem; margin-bottom: 1rem; letter-spacing: 0.0625rem; }
         .hero-names { display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin: 1rem 0; }
-        .name-unit { text-align: center; }
         .name-unit div { font-size: 1.8rem; font-weight: 500; }
         .name-unit span { font-size: 0.75rem; display: block; letter-spacing: 0.125rem; margin-top: 0.125rem; opacity: 0.9; }
         .xi-icon { color: var(--brand-red); font-size: 2.2rem; line-height: 1; }
 
-        /* Story Text Blocks */
         .text-block { padding: 5rem 10%; text-align: center; }
-        .text-block h3 { font-size: 1.1rem; letter-spacing: 0.2rem; margin-bottom: 0.75rem; font-weight: 400; color: #888; }
+        .text-block h3 { font-size: 1.1rem; letter-spacing: 0.2rem; margin-bottom: 0.75rem; font-weight: 400; color: #555; }
         .text-block h4 { font-size: 2.2rem; letter-spacing: 0.0625rem; margin-bottom: 0.5rem; color: #222; font-weight: 300; }
-        .text-block p { font-size: 1rem; line-height: 2.2; color: #555; letter-spacing: 0.1rem; }
+        .text-block p { font-size: 1rem; line-height: 2.2; color: var(--light-text); letter-spacing: 0.1rem; }
 
-        /* Image Overlays */
         .img-with-tag { position: relative; width: 100%; margin: 0 auto; padding: 0 5%; }
         .sweet-tag { 
             position: absolute; 
@@ -156,9 +161,9 @@
         }
 
         /* Graffiti Section */
-        .graffiti-layout { padding: 3rem 0; display: flex; flex-direction: column; }
+        .graffiti-layout { padding: 3rem 0 1rem; display: flex; flex-direction: column; }
         .graffiti-container { position: relative; width: 100%; padding: 0 5% 0 15%; }
-        .graffiti-bg-block { position: absolute; top: -1.5rem; left: 10%; width: 75%; height: 85%; background: #F0F7F0; z-index: 1; }
+        .graffiti-bg-block { position: absolute; top: -1.5rem; left: 10%; width: 75%; height: 85%; background: var(--soft-green); z-index: 1; }
         .graffiti-main-img { position: relative; z-index: 2; width: 100%; }
         .graffiti-quote { 
             position: absolute; 
@@ -173,7 +178,6 @@
             font-weight: bold; 
             line-height: 1.2;
         }
-        
         .graffiti-sub-box { 
             width: 75%; 
             align-self: flex-start; 
@@ -181,12 +185,25 @@
             margin-top: -20%; 
             position: relative; 
             z-index: 4; 
-            border: 12px solid #fff; 
+            border: 10px solid #fff; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+        .graffiti-date-tag {
+            position: absolute;
+            right: -18%; /* 負向偏移以對齊大圖右緣並向左收回半行 */
+            bottom: 0;
+            transform: rotate(90deg);
+            transform-origin: right bottom;
+            font-size: 1.1rem;
+            color: #444;
+            letter-spacing: 3px;
+            font-weight: 300;
+            z-index: 5;
+            white-space: nowrap;
+            line-height: 1;
         }
 
         /* Crosswalk Section */
-        .crosswalk-header { text-align: center; font-size: 0.85rem; letter-spacing: 0.375rem; margin: 2.5rem 0 1.25rem; color: #bbb; font-weight: 300; }
         .script-overlay { 
             position: absolute; 
             bottom: -3.2rem; 
@@ -201,71 +218,105 @@
         .script-overlay span:last-child { font-size: 2rem; display: block; margin-top: -0.2rem; }
 
         /* Calendar Section */
-        .calendar-section { padding: 4rem 0; background: #fff; }
-        .calendar-bg-box { position: relative; margin-bottom: 2.5rem; }
-        .calendar-tag-top { position: absolute; top: 1rem; left: 8%; font-size: 0.7rem; color: #999; letter-spacing: 0.2rem; z-index: 2; }
-        .calendar-container { padding: 0 10%; text-align: center; }
-        .calendar-header { 
-            position: absolute; 
-            top: 45%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            font-size: 4rem; 
-            color: #fff; 
-            z-index: 5; 
-            font-weight: 300; 
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            white-space: nowrap;
+        .calendar-section { padding: 4rem 0 1rem; background: #fff; }
+        .calendar-bg-box { 
+            position: relative; 
+            margin: 0; 
+            overflow: hidden;
+            height: 85vh; 
+            min-height: 550px;
         }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1rem 0.3rem; font-size: 0.95rem; color: #666; }
-        .calendar-day-head { font-weight: bold; margin-bottom: 1rem; color: #333; }
-        .calendar-day { padding: 0.5rem 0; position: relative; }
-        .calendar-day.active { color: #fff; z-index: 1; }
-        .calendar-day.active::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 2.2rem; height: 2.2rem; background: var(--brand-red); border-radius: 50%; z-index: -1; }
+        .calendar-bg-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
+        .calendar-content-top { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; 
+            text-align: center; z-index: 10;
+            color: #fff; padding-top: 2.5rem;
+        }
+        .calendar-header { 
+            font-size: 3.8rem; color: #fff; font-weight: 300; 
+            text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+            margin-top: 0.5rem; display: block; line-height: 1;
+        }
+        .calendar-content-bottom { 
+            position: absolute; 
+            bottom: 0; left: 0; width: 100%; 
+            padding: 0 8% 3rem; z-index: 10;
+        }
+        .calendar-grid { 
+            display: grid; grid-template-columns: repeat(7, 1fr); 
+            gap: 1.5rem 0.3rem; font-size: 1.15rem; color: #fff;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.9); text-align: center;
+        }
+        .calendar-day-head { font-weight: bold; margin-bottom: 0.6rem; }
+        .calendar-day { padding: 0.4rem 0; position: relative; z-index: 1; }
+        .calendar-day.active { font-weight: bold; }
+        .calendar-day.active::after { 
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 2.2rem; height: 2.2rem; background: var(--brand-red); border-radius: 50%; 
+            z-index: -1; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
 
         /* Countdown Section */
-        .countdown-container { padding: 5rem 8%; background: #fff; text-align: center; }
-        .countdown-title { font-size: 1.4rem; letter-spacing: 0.125rem; margin-bottom: 0.5rem; font-weight: 400; color: #666; }
-        .countdown-time-main { font-size: 2rem; margin-bottom: 3rem; color: #222; font-weight: 300; }
-        
-        .countdown-flex { display: flex; justify-content: space-between; align-items: flex-start; text-align: left; gap: 1rem; }
-        .count-boxes { display: flex; flex-direction: column; gap: 1rem; width: 45%; }
-        .count-item { display: flex; align-items: center; gap: 0.75rem; }
+        .countdown-container { padding: 5rem 8% 2rem; background: #fff; text-align: center; }
+        .countdown-title, .countdown-time-main { font-size: 1.6rem; letter-spacing: 0.125rem; color: #333; font-weight: 400; margin: 0.2rem 0; }
+        .countdown-flex { display: flex; justify-content: space-between; align-items: stretch; text-align: left; gap: 1rem; margin-top: 3rem; }
+        .count-boxes { display: flex; flex-direction: column; gap: 1rem; width: 35%; }
+        .countdown-right-col { width: 62%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; }
         .count-box { 
-            background: var(--pink-bg); 
-            color: var(--pink-text); 
-            width: 4.5rem; 
-            height: 4.5rem; 
-            border-radius: 0.75rem; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
+            background: var(--pink-bg); color: var(--pink-text); 
+            width: 4.8rem; height: 4.8rem; border-radius: 0.75rem; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
             box-shadow: 0 4px 10px rgba(233, 78, 78, 0.15);
         }
-        .count-num { font-size: 1.6rem; font-weight: bold; line-height: 1; }
-        .count-unit { font-size: 0.8rem; margin-top: 0.2rem; }
-        .count-item-label { font-size: 1rem; color: #ddd; }
-        
-        .countdown-poem { width: 50%; text-align: right; font-size: 0.95rem; line-height: 2.8; color: #777; letter-spacing: 0.0625rem; padding-top: 0.5rem; }
+        .count-num { font-size: 1.8rem; font-weight: bold; line-height: 1; }
+        .count-unit { font-size: 0.85rem; margin-top: 0.2rem; }
+        .countdown-poem { text-align: right; font-size: 1rem; line-height: 2.2; color: #444; letter-spacing: 0.0625rem; }
+        .countdown-portraits-small { width: 100%; display: flex; gap: 0.8rem; justify-content: flex-end; margin-top: 1.5rem; }
+        .countdown-portraits-small img { width: 48%; border-radius: 0.6rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05); aspect-ratio: 3/4.2; object-fit: cover; }
 
-        .countdown-portraits { display: flex; gap: 1rem; justify-content: center; margin-top: 3.5rem; padding: 0 2%; }
-        .countdown-portraits img { width: 48%; border-radius: 0.75rem; box-shadow: 0 0.3125rem 1.25rem rgba(0,0,0,0.05); }
-
-        /* Footer */
-        .footer-quote { padding: 5rem 10%; text-align: center; color: #aaa; font-size: 1rem; line-height: 2; letter-spacing: 0.0625rem; }
+        /* Footer & Info */
+        .footer-quote { padding: 5rem 10% 3rem; text-align: center; color: #555; font-size: 1.1rem; line-height: 2; letter-spacing: 0.0625rem; background: var(--soft-green); }
+        #sec-info { padding: 0 5% 5rem; background: var(--soft-green); display: flex; justify-content: center; align-items: center; }
+        .info-card {
+            background: rgba(255, 255, 255, 0.95); padding: 2.5rem 1.5rem;
+            border: 1px solid var(--gold-primary); text-align: center;
+            width: 100%; max-width: 450px; z-index: 10;
+            border-radius: 5px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .info-card h2 { color: var(--gold-primary); margin-bottom: 1.5rem; font-weight: normal; letter-spacing: 3px; font-size: 1.8rem; }
+        .info-card p { margin: 0.8rem 0; font-size: 1rem; color: var(--dark-text); line-height: 1.6; }
+        .btn-rsvp {
+            display: inline-block; margin-top: 2rem; padding: 0.8rem 2.5rem;
+            background: var(--gold-primary); color: white; text-decoration: none;
+            font-size: 1rem; border-radius: 2px; transition: opacity 0.3s;
+        }
+        .map-img { width: 100%; margin-top: 1.5rem; border-radius: 3px; cursor: pointer; }
 
         #music-btn { position: fixed; top: 1.25rem; right: 1.25rem; z-index: 3000; width: 2.5rem; height: 2.5rem; cursor: pointer; opacity: 0.8; background: rgba(0,0,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0.3rem; transition: opacity 0.3s; }
         #music-btn.playing { animation: rotate 4s linear infinite; opacity: 1; background: rgba(255,255,255,0.3); }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+        #photo-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; display:none; justify-content:center; align-items:center; cursor:zoom-out; }
+        #full-res-img { max-width:90%; max-height:85%; border:2px solid #fff; box-shadow:0 0 20px rgba(0,0,0,0.5); }
+
     </style>
 </head>
 <body>
 
+    <!-- 載入動畫層 -->
+    <div id="loading-overlay">
+        <div class="loader-ring"></div>
+        <div class="loader-text serif italic">Loading Memories...</div>
+    </div>
+
     <audio id="bgm" loop preload="auto">
         <source src="music.mp3" type="audio/mpeg">
     </audio>
+
+    <div id="photo-overlay" onclick="this.style.display='none'">
+        <img id="full-res-img" src="address.jpeg">
+    </div>
 
     <div id="music-btn" onclick="toggleMusic()">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
@@ -312,15 +363,15 @@
         </section>
 
         <!-- Section 3: Title -->
-        <section class="text-block" style="padding: 4rem 0;">
+        <section class="text-block">
             <div style="display: inline-block; text-align: left;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.2rem;">
-                    <span style="font-size: 1.5rem; font-weight: 500; color: #333; letter-spacing: 2px;">我的一封情書</span>
+                    <span style="font-size: 1.5rem; font-weight: 500; color: #222; letter-spacing: 2px;">我的一封情書</span>
                     <span class="serif italic" style="color: var(--pink-text); font-size: 1.1rem; letter-spacing: 1px;">FOREVER</span>
                 </div>
                 <h4 class="serif" style="font-size: 2.8rem; line-height: 1; margin: 0; color: #222; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">OUR LOVE STORY</h4>
                 <div style="text-align: right; margin-top: 0.5rem;">
-                    <span style="font-size:0.75rem; color:#ccc; letter-spacing:5px; font-weight: 300;">FALL IN LOVE</span>
+                    <span style="font-size:0.75rem; color:#666; letter-spacing:5px; font-weight: 300;">FALL IN LOVE</span>
                 </div>
             </div>
         </section>
@@ -334,15 +385,15 @@
         </section>
 
         <!-- Section 5: Quote Block -->
-        <section class="text-block" style="padding-top: 2rem;">
-            <div style="margin-bottom:2.5rem; color:#ddd; font-size:0.8rem; letter-spacing:4px;">( WEDDING INVITATION )</div>
+        <section class="text-block" style="padding-top: 2rem; padding-bottom: 1rem;">
+            <div style="margin-bottom:2.5rem; color:#999; font-size:0.8rem; letter-spacing:4px;">( WEDDING INVITATION )</div>
             <p style="font-weight: 300;">以前以為婚禮是種形式，<br>現在懂得這是一次難得的團聚。<br>謝謝你們不辭辛勞的到來，<br>以及始終如一的陪伴。<br>感謝生命中每一位重要的家人朋友，<br>真的很想念大家，期待在婚禮上見到你們。</p>
             <div style="margin-top:3rem; font-size:1.2rem; letter-spacing:6px; font-weight:300;">2026.06.27</div>
             <div style="margin-top:0.8rem; font-size:1.4rem; letter-spacing:8px; font-weight:400;">我們，婚禮見～</div>
         </section>
 
         <!-- Section 6: Graffiti Story -->
-        <section class="graffiti-layout">
+        <section class="graffiti-layout" style="padding-bottom: 1rem;">
             <div class="graffiti-container">
                 <div class="graffiti-bg-block"></div>
                 <div class="graffiti-quote harshita">Love grows with the wind but never goes away.</div>
@@ -351,29 +402,29 @@
             
             <div class="graffiti-sub-box">
                 <img src="p5.jpg" class="img-full data-img" data-key="graffiti2">
-                <!-- 06.27 Rotated - Corrected Position -->
-                <div style="position: absolute; right: 0.5rem; top: 2rem; transform: rotate(90deg); transform-origin: center; font-size: 0.9rem; color: #666; letter-spacing: 3px; font-weight: 300;">06.27</div>
+                <!-- 旋轉日期標籤：移入容器內以實現底緣精確切齊 -->
+                <div class="graffiti-date-tag">06.27</div>
             </div>
 
             <div style="padding: 2rem 5% 0; text-align: left;">
                 <div style="display: flex; align-items: flex-end; gap: 0.8rem;">
                     <span style="font-size: 2.8rem; font-weight: bold; color: var(--brand-red); line-height: 1;">相·愛</span>
-                    <div style="font-size: 0.85rem; color: #666; line-height: 1.2; letter-spacing: 3px; font-weight: 300; margin-bottom: 0.3rem;">
+                    <div style="font-size: 0.85rem; color: #444; line-height: 1.2; letter-spacing: 3px; font-weight: 300; margin-bottom: 0.3rem;">
                         FALL IN<br>LOVE
                     </div>
                 </div>
-                <div style="font-size:0.85rem; color:#888; margin-top: 0.8rem; letter-spacing: 1px;">從前是我們，往後是我們</div>
+                <div style="font-size:0.85rem; color:#666; margin-top: 0.8rem; letter-spacing: 1px;">從前是我們，往後是我們</div>
             </div>
         </section>
 
         <!-- Section 7: Poem -->
-        <section class="text-block" style="padding: 6rem 10%;">
+        <section class="text-block" style="padding: 4rem 10%;">
             <p style="line-height: 2.5;">一眼心動 從此歲月深情<br>愛情是我們在人海中的一場意外驚喜<br>跨越時光而來<br>只為許下一個關於未來的承諾<br>在天朗氣清的日子裡<br>我們攜手奔赴明天</p>
         </section>
 
         <!-- Section 8: Crosswalk Big Photo -->
         <section style="background:#fff; padding: 1rem 0 4rem;">
-            <div style="display: flex; justify-content: space-between; padding: 0 8% 1.5rem; color: #888; font-size: 0.8rem; letter-spacing: 3px;" class="serif">
+            <div class="divider-bar" style="border:none; color: #666; font-size: 0.8rem; letter-spacing: 3px;">
                 <span>YOU ARE</span>
                 <span>MY DEAREST</span>
                 <span>LOVE</span>
@@ -401,29 +452,26 @@
         </section>
 
         <!-- Section 10: Quotes 2 -->
-        <section class="text-block" style="padding-top: 0;">
-            <p class="harshita" style="font-size:0.95rem; color:#444; line-height:1.6;">I love three things in this world. Sun,<br>moon and you. Sun for morning, moon for night, and you forever.</p>
-            <div style="margin-top:4rem;">
+        <section class="text-block" style="padding-top: 0; padding-bottom: 1rem;">
+            <div style="width: 100%; max-width: 100%; padding: 0;">
+                <p class="harshita" style="font-size:0.75rem; color:#333; line-height:1.6; letter-spacing: 0;">I love three things in this world. Sun, moon and you. Sun for morning, moon for night, and you forever.</p>
+            </div>
+            <div style="margin-top:3rem;">
                 <h4 style="font-size:3rem; color:var(--brand-red); font-weight:500; letter-spacing: 10px;">相·守</h4>
-                <div style="font-size:0.85rem; color:#888; letter-spacing:5px; margin-top:0.5rem;">ARE PERFECT / YOU ARE</div>
-                <p style="margin-top:1.5rem; font-size:1.1rem; color:#666; font-weight: 300;">許一人以偏愛 盡餘生之慷慨</p>
+                <div style="font-size:0.85rem; color:#666; letter-spacing:5px; margin-top:0.5rem;">ARE PERFECT / YOU ARE</div>
+                <p style="margin-top:1.5rem; font-size:1.1rem; color:#444; font-weight: 300;">許一人以偏愛 盡餘生之慷慨</p>
             </div>
         </section>
 
         <!-- Section 11: Calendar -->
-        <section class="calendar-section">
-            <div class="calendar-bg-box" style="padding: 0 5%; position: relative;">
-                <div style="display:flex; justify-content:space-between; padding: 0 3% 0.5rem; color:#fff; font-size:0.7rem; letter-spacing:2px; position:relative; z-index:15;" class="serif">
-                    <span>NO.12</span>
-                    <span>06.27</span>
-                    <span>FALL IN LOVE</span>
-                    <span>LOVE</span>
-                </div>
-                <img src="p9.jpg" class="img-full data-img" data-key="calendar_bg" style="border-radius: 5px; filter: brightness(0.85);">
-                
-                <div class="calendar-container">
-                    <div style="margin-bottom:1rem; color:rgba(255,255,255,0.7); font-size:0.75rem; letter-spacing:4px;">( WEDDING INVITATION )</div>
+        <section class="calendar-section" style="padding-bottom: 1rem;">
+            <div class="calendar-bg-box">
+                <div class="calendar-content-top">
+                    <div style="color:rgba(255,255,255,0.85); font-size:0.75rem; letter-spacing:4px;">( WEDDING INVITATION )</div>
                     <div class="calendar-header serif">06 / 27</div>
+                </div>
+                <img src="p9.jpg" class="img-full data-img" data-key="calendar_bg">
+                <div class="calendar-content-bottom">
                     <div class="calendar-grid">
                         <div class="calendar-day-head">一</div><div class="calendar-day-head">二</div><div class="calendar-day-head">三</div><div class="calendar-day-head">四</div><div class="calendar-day-head">五</div><div class="calendar-day-head">六</div><div class="calendar-day-head">日</div>
                         <div class="calendar-day">1</div><div class="calendar-day">2</div><div class="calendar-day">3</div><div class="calendar-day">4</div><div class="calendar-day">5</div><div class="calendar-day">6</div><div class="calendar-day">7</div>
@@ -436,39 +484,24 @@
             </div>
         </section>
 
+        <!-- 間距補償 -->
+        <div style="height: 2rem; background: #fff;"></div>
+
         <!-- Section 12: Countdown -->
-        <section class="countdown-container">
+        <section class="countdown-container" style="padding-bottom: 1rem;">
             <div class="countdown-title-group">
                 <h2 class="countdown-title">2026年06月27日 星期六</h2>
-                <div class="countdown-time-main serif">中午12:00</div>
+                <div class="countdown-time-main">中午12:00</div>
             </div>
-            
             <div class="countdown-flex">
                 <div class="count-boxes">
-                    <div class="count-item">
-                        <div class="count-box"><span class="count-num" id="days">00</span><span class="count-unit">天</span></div>
-                        <span class="count-item-label">/</span>
-                    </div>
-                    <div class="count-item">
-                        <div class="count-box"><span class="count-num" id="hours">00</span><span class="count-unit">時</span></div>
-                        <span class="count-item-label">/</span>
-                    </div>
-                    <div class="count-item">
-                        <div class="count-box"><span class="count-num" id="mins">00</span><span class="count-unit">分</span></div>
-                        <span class="count-item-label">/</span>
-                    </div>
-                    <div class="count-item">
-                        <div class="count-box"><span class="count-num" id="secs">00</span><span class="count-unit">秒</span></div>
-                        <span class="count-item-label">/</span>
-                    </div>
+                    <div class="count-item"><div class="count-box"><span class="count-num" id="days">00</span><span class="count-unit">天</span></div></div>
+                    <div class="count-item"><div class="count-box"><span class="count-num" id="hours">00</span><span class="count-unit">時</span></div></div>
+                    <div class="count-item"><div class="count-box"><span class="count-num" id="mins">00</span><span class="count-unit">分</span></div></div>
+                    <div class="count-item"><div class="count-box"><span class="count-num" id="secs">00</span><span class="count-unit">秒</span></div></div>
                 </div>
-                
                 <div class="countdown-right-col">
-                    <div class="countdown-poem">
-                        天光漫漫 降落這場塵世緣<br>
-                        跨越時光的長河而來<br>
-                        只為與你共度一生平凡
-                    </div>
+                    <div class="countdown-poem">天光漫漫 降落這場塵世緣<br>跨越時光的長河而來<br>只為與你共度一生平凡</div>
                     <div class="countdown-portraits-small">
                         <img src="p10.jpg" class="data-img" data-key="port1">
                         <img src="p11.jpg" class="data-img" data-key="port2">
@@ -482,55 +515,72 @@
             As the clouds and mist dissipate<br>
             Love you and everyone knows it
         </footer>
+
+        <!-- Section Info -->
+        <section id="sec-info">
+            <div class="info-card">
+                <h2>Wedding Day</h2>
+                <p><b>李威廷 & 連佳怡</b></p>
+                <hr style="border:0; border-top:1px solid #eee; margin:1rem 0;">
+                <p>2026年6月27日 (六)</p>
+                <p>11:30 入席 | 12:00 開席</p>
+                <p>台中林皇宮 1F 紫宴廳</p>
+                <p><small class="allow-select">台中市西屯區臺灣大道三段33號<br>捷運市政府站旁</small></p>
+                <img src="address.jpeg" class="map-img" alt="Map" onclick="document.getElementById('photo-overlay').style.display='flex'">
+                <a href="https://forms.gle/your-link" class="btn-rsvp">填寫報名表單</a>
+            </div>
+        </section>
     </div>
 
     <script>
-        /**
-         * 圖片網址配置區
-         */
         const imgConfig = {
-            hero: 'p1.jpg',
-            story1: 'p2.jpg',
-            landscape: 'p3.jpg',
-            graffiti1: 'p4.jpg',
-            graffiti2: 'p5.jpg',
-            crosswalk: 'p6.jpg',
-            closeup1: 'p7.jpg',
-            closeup2: 'p8.jpg',
-            calendar_bg: 'p9.jpg',
-            port1: 'p10.jpg',
-            port2: 'p11.jpg'
+            hero: 'p1.jpg', story1: 'p2.jpg', landscape: 'p3.jpg', graffiti1: 'p4.jpg', 
+            graffiti2: 'p5.jpg', crosswalk: 'p6.jpg', closeup1: 'p7.jpg', closeup2: 'p8.jpg', 
+            calendar_bg: 'p9.jpg', port1: 'p10.jpg', port2: 'p11.jpg'
         };
 
-        const config = {
-            scrollSpeed: 0.9,
-            targetDate: new Date("2026-06-27T12:00:00").getTime()
-        };
+        const config = { scrollSpeed: 0.9, targetDate: new Date("2026-06-27T12:00:00").getTime() };
 
         let isOpened = false;
         let currentY = 0;
         let isUserInteracting = false;
         let animationId = null;
+        let wakeLock = null;
+        let interactionTimer = null;
 
         const container = document.getElementById('main-scroll-container');
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('music-btn');
 
-        // 初始化圖片
+        // 載入處理
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loading-overlay');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 600);
+            initImages();
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        });
+
+        // 螢幕長亮處理
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) { console.log("WakeLock failed."); }
+        }
+
         function initImages() {
             document.querySelectorAll('.data-img').forEach(img => {
                 const key = img.getAttribute('data-key');
-                if (imgConfig[key]) {
-                    img.src = imgConfig[key];
-                }
+                if (imgConfig[key]) img.src = imgConfig[key];
             });
         }
 
-        // 倒數計時邏輯
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = config.targetDate - now;
-
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -550,6 +600,7 @@
                     container.style.transform = `translateY(-${currentY}px)`;
                 } else {
                     cancelAnimationFrame(animationId);
+                    if(wakeLock) wakeLock.release();
                     return;
                 }
             }
@@ -562,28 +613,26 @@
             setTimeout(() => {
                 document.getElementById('envelope-wrapper').classList.add('opened-envelope');
                 isOpened = true;
-                bgm.play().then(() => {
-                    musicBtn.classList.add('playing');
-                }).catch(()=>{ console.log("Music play blocked."); });
-                autoScroll();
+                bgm.play().catch(()=>{});
+                musicBtn.classList.add('playing');
+                
+                requestWakeLock();
+                // 點擊信封後延遲 2 秒開始捲動
+                setTimeout(() => { autoScroll(); }, 2000);
             }, 800);
         }
 
         function toggleMusic() {
-            if (bgm.paused) {
-                bgm.play();
-                musicBtn.classList.add('playing');
-            } else {
-                bgm.pause();
-                musicBtn.classList.remove('playing');
-            }
+            if (bgm.paused) { bgm.play(); musicBtn.classList.add('playing'); }
+            else { bgm.pause(); musicBtn.classList.remove('playing'); }
         }
 
-        // 互動處理
+        // 互動處理：確保 currentY 實時同步
         const stopInteraction = () => { isUserInteracting = true; };
         const resumeInteraction = () => { 
-            clearTimeout(window.interactionTimer);
-            window.interactionTimer = setTimeout(() => { isUserInteracting = false; }, 2500); 
+            clearTimeout(interactionTimer);
+            // 使用者停止介入後 1 秒恢復自動捲動
+            interactionTimer = setTimeout(() => { isUserInteracting = false; }, 1000); 
         };
 
         window.addEventListener('wheel', (e) => {
@@ -607,17 +656,13 @@
             const touchY = e.touches[0].clientY;
             const diff = touchStartY - touchY;
             const maxScroll = container.offsetHeight - window.innerHeight;
+            // 完美銜接：手動滑動直接更新 currentY
             currentY = Math.min(Math.max(0, currentY + diff), maxScroll);
             container.style.transform = `translateY(-${currentY}px)`;
             touchStartY = touchY;
         }, { passive: true });
         
         window.addEventListener('touchend', resumeInteraction, { passive: true });
-
-        // 啟動
-        initImages();
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
 
     </script>
 </body>
